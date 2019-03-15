@@ -1,4 +1,4 @@
-@(employees: List[models.Employee],departments: List[models.Department], user: models.users.User)
+@(employees: List[models.Employee],departments: List[models.Department], user: models.users.User, env: play.api.Environment)
 @main("On Staff", user){
     <h1>On Staff here</h1>
 
@@ -27,6 +27,7 @@
             <thead>
         <!-- The header row-->
         <tr>
+            <th>Image</th>
             <th>ID</th>
             <th>Name</th>
             <th>Department</th>
@@ -41,6 +42,11 @@
             @* Loop for creating table rows from Employee data *@
             @for(i<-employees) {
                <tr>
+                   @if(env.resource("public/images/productImages/" + i.getId + "thumb.jpg").isDefined){
+                       <td><img src="/assets/images/productImages/@(i.getId + "thumb.jpg")"/></td>
+                   } else{
+                       <td><img src="/assets/images/productImages/noImage.jpg"/></td>
+                   }
                   <td>@i.getId</td>
                   <td>@i.getName</td>
                   <td>@i.getDepartment.getName</td>

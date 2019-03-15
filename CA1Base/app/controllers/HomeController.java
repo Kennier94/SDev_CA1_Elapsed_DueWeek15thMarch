@@ -2,6 +2,15 @@ package controllers;
 
 import play.mvc.*;
 
+import play.mvc.Http.*;
+import play.mvc.Http.MultipartFormData.FilePart;
+import java.io.File;
+
+import java.io.IOException;
+import java.awt.image.*;
+import javax.imageio.*;
+import org.imgscalr.*;
+
 import views.html.*;
 
 import play.api.Environment;
@@ -23,8 +32,11 @@ public class HomeController extends Controller {
 
     private FormFactory formFactory;
 
+    private Environment e;
+
     @Inject
-    public HomeController(FormFactory f) {
+    public HomeController(FormFactory f, Environment env) {
+        this.e = env;
         this.formFactory = f;
 }
     /**
@@ -42,7 +54,8 @@ public class HomeController extends Controller {
         }else {
             employeeList = Department.find.ref(cat).getEmployees();
         }
-        return ok(employeesOnRecord.render(employeeList, departmentList, User.getUserById(session().get("email"))));
+        return ok(employeesOnRecord.render(employeeList, departmentList, 
+            User.getUserById(session().get("email")),e));
 
      }
 
@@ -90,12 +103,17 @@ public Result addEmployeeSubmit() {
         }else{
             newEmployee.update();
         }
+
+        MultipartFormData<File> data = request().body().asMultipartFormData();
+        FilePart<File> image = data.getFile("upload");
+        String saveImageMessage = saveFile(newEmployee.getId(), image);
+
         // We use the flash scope to specify that we want a success message superimposed on
         // the next displayed page. The flash scope uses cookies, which we can read and set
         // using the flash() function of the Play Framework. The flash scope cookies last
         // for a single request (unlike session cookies, which we will use for log-in in a
         // future lab). So, add a success message to the flash scope.
-        flash("success", "Employee " + newEmployee.getName() + " was added/updated.");
+        flash("success", "Employee " + newEmployee.getName() + " was added/updated" + saveImageMessage);
         // Having specified we want a message at the top, we can redirect to the onsale page,
         // which will have to be modified to read the flash scope and display it.
         return redirect(controllers.routes.HomeController.employeesOnRecord(0));
@@ -136,6 +154,43 @@ public Result deleteEmployee(Long id) {
 
     // Display the "add item" page, to allow the user to update the item
         return ok(addEmployee.render(employeeForm, User.getUserById(session().get("email"))));
+    }
+
+    public String saveFile(Long id, FilePart<File> uploaded){
+        if(uploaded != null){
+            String mimeType = uploaded.getContentType();
+            if(mimeType.startsWith("image/")){
+                String fileName = uploaded.getFilename();
+                String extension = "";
+                int i = fileName.lastIndexOf('.');
+                if(i >= 0){
+                    extension = fileName.substring(i+1);
+                }
+                File file = uploaded.getFile();
+                File dir = new File("public/images/productImages");
+                if(!dir.exists()){
+                    dir.mkdirs();
+                }
+                File newFile = new File("public/images/productImages/", id + "." + extension);
+                if(file.renameTo(newFile)){
+                    try{
+                        BufferedImage img = ImageIO.read(newFile);
+                        BufferedImage scaledImg = Scalr.resize(img, 90);
+                        if(ImageIO.write(scaledImg, extension, new File("public/images/productImages/",
+                            id + "thumb.jpg"))){
+                                return "/ file uploaded and thumbnail created.";
+                            }else {
+                                return "/ file uploaded but thumbnail creation failed.";
+                            }
+                    } catch(IOException e){
+                        return "/ file uploaded but thumbnail creation failed.";
+                    }
+                } else{
+                    return "/ file upload failed.";
+                }
+            }
+        }
+        return "/ no image file.";
     }
 
 }

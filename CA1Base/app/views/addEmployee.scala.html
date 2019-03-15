@@ -3,12 +3,13 @@
 @import helper._
 
 @main("Add Employee", user){
-    <p class="lead">Add a new employee</p>
+    <p class="lead">Add New Employee</p>
 
     <!-- Use a views.html.helpers package method to create the form (instead of html)-->
     <!-- Note the arguments that are being passed to the scala function form (they are
          essentially instructions for constructing an HTML form element)-->
-    @form(action=routes.HomeController.addEmployeeSubmit(), 'class -> "form-horizontal", 'role -> "form") {
+    @form(action=routes.HomeController.addEmployeeSubmit(), 'class -> 
+        "form-horizontal", 'role -> "form", 'method -> "POST", 'enctype -> "multipart/form-data") {
         @* CSRF attack prevention *@
         @* This token, sent by the controller, will be used to authenticate the form submission *@
         @CSRF.formField
@@ -29,7 +30,9 @@
             )
             @inputText(employeeForm("age"), '_label -> "Age", 'class -> "form-control")
             @inputText(employeeForm("yearsWorked"), '_label -> "YearsWorked", 'class -> "form-control")
-            <!-- @inputText(employeeForm("startDate"), '_label -> "StartDate", 'class -> "form-control") -->
+
+            <label>Image Upload</label>
+            <input class="btn-sm btn-default" type="file" name="upload">
 
             @inputText(employeeForm("id"), '_label -> "", 'hidden -> "hidden")
             

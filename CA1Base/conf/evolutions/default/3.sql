@@ -1,4 +1,6 @@
 # --- !Ups
-insert into user (email,name,password,role) values ( 'admin@company.com', 'Craig Admin', 'password', 'admin');
-insert into user (email,name,password,role) values ( 'manager@company.com', 'Mark Manager', 'password', 'manager');
-insert into user (email,name,password,role) values ( 'customer@company.com', 'Sean Customer', 'password', 'customer');
+delete from user;
+
+insert into user (email,name,password,role) values ( 'mark@company.com', 'Mark Admin', 'password', 'admin');
+insert into user (email,name,password,role) values ( 'craig@company.com', 'Craig Manager', 'password', 'manager');
+insert into user (email,name,password,role) values ( 'staff@company.com', 'Sean Staff', 'password', 'staff');
