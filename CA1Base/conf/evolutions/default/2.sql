@@ -5,7 +5,7 @@
 delete from employee;
  delete from department;
  
-insert into department (id,name) values ( 1,'Compluting' );
+insert into department (id,name) values ( 1,'Computing' );
 insert into department (id,name) values ( 2,'Marketing' );
 insert into department (id,name) values ( 3,'HR' );
 insert into department (id,name) values ( 4,'PR' );

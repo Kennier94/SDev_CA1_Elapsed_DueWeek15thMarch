@@ -1,4 +1,4 @@
-name := """lab 5 CRUD CDU"""
+name := """SDev CA 1"""
 
 version := "1.0-SNAPSHOT"
 

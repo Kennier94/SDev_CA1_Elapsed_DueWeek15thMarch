@@ -1,4 +1,4 @@
-@(pagename:String)(content:Html)
+@(pagename:String, user: models.users.User)(content:Html)
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,41 +13,34 @@
 	    .midcol h3 { text-align: center; color: steelblue; }
 	    .redtext { color: red; }
 	</style>
-	<title>OFM @pagename</title>
+	<title>Company</title>
     </head>
     <body>
 	<nav class="navbar navbar-inverse">
 	    <div class="container-fluid">
 		<div class="navbar-header">
-		    <a class="navbar-brand" href="#">WebSiteName</a>
+		    <a class="navbar-brand" href="#">Company</a>
 		</div>
 		<ul class="nav navbar-nav">
             <li @if(pagename == "Home") {class="active"}><a href="@routes.HomeController.index()">Home</a></li>
 		    <li @if(pagename == "EmployeesOnRecord") {class="active"}><a href="@routes.HomeController.employeesOnRecord()">Employees On Record</a></li>
 		    <li @if(pagename == "About") {class="active"}><a href="@routes.HomeController.about()">About us</a></li>
+			<li @if(pagename == "Log In"){class="active"}>
+				@if(user != null){
+					<a href="@routes.LoginController.logout()">Log Out</a>
+				} else {
+					<a href="@routes.LoginController.login()">Log In</a>
+				}
+			</li>
 		</ul>
 	    </div>
 	</nav>
 
 	<div class="container-fluid">
 	    <div class="row">
-		<div class="col-sm-2">
-		    <div class="well sidecol">
-			<h2>News</h2>
-			<h3>New product sub-category</h3>
-			<p>Following the sudden and unprecedented volumes of trade in fashion paper bags, our <span class="redtext">bags</span> category has been extended to include a seventh subcategory, <span class="redtext">paper handbags</span>.
-		    </div>
-		</div>
-		<div class="col-sm-8">
+		<div class="col-sm-12">
 		    <div class="midcol">
 			@content
-		    </div>
-		</div>
-		<div class="col-sm-2">
-		    <div class="well sidecol">
-			<h2>Events</h2>
-			<h3>The 153rd Meet for Real event</h3>
-			<p>The popular <span class="redtext">Meet for Real</span> event takes place this Sunday at the Square Park, from 7am until 1pm. It will yet again give flea-market enthusiasts a chance to engage in a bit of live bartering and banter with their fellow sitesters.</p>
 		    </div>
 		</div>
 	    </div>

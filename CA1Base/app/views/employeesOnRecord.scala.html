@@ -1,5 +1,5 @@
-@(employees: List[models.Employee],departments: List[models.Department])
-@main("On Staff"){
+@(employees: List[models.Employee],departments: List[models.Department], user: models.users.User)
+@main("On Staff", user){
     <h1>On Staff here</h1>
 
 
@@ -11,14 +11,14 @@
 }
     <div class="col-sm-3">
 		<h4>Departments</h4>
-	        <ul class="list-group">
-                    <a href = "@routes.HomeController.employeesOnRecord(0)" class="list-group-item">All Departments</a>
+	        <div class="list-group">
+                <a href = "@routes.HomeController.employeesOnRecord(0)" class="list-group-item">All Departments</a>
 		        @for(c<-departments) {
 			        <a href = "@routes.HomeController.employeesOnRecord(c.getId())" class="list-group-employee catheight">@c.getName
                         <span class="badge">@c.getEmployees.size</span> 
                     </a>
 			    }
-            </ul>
+            </div>
     </div>
 
     <div class="col-sm-9">
@@ -46,29 +46,32 @@
                   <td>@i.getDepartment.getName</td>
                   <td>@i.getAge</td>
                   <td>@i.getYearsWorked</td>
-                 
+                
                   <!-- Update button -->
-						<td>
-							<a href="@routes.HomeController.updateEmployee(i.getId)" class="button-xs btn-danger">
-								<span class="glyphicon glyphicon-pencil"></span>
-							</a>
+                @if((user != null) && ("admin".equals(user.getRole()))){
+					<td>
+						<a href="@routes.HomeController.updateEmployee(i.getId)" class="button-xs btn-danger">
+							<span class="glyphicon glyphicon-pencil"></span>
+						</a>
                 </td>
                   <!-- Delete button -->
-						<td>
-							<a href="@routes.HomeController.deleteEmployee(i.getId)" class="button-xs btn-danger" onclick="return confirmDel();">
-								<span class="glyphicon glyphicon-trash"></span>
-							</a>
+				<td>
+					<a href="@routes.HomeController.deleteEmployee(i.getId)" class="button-xs btn-danger" onclick="return confirmDel();">
+						<span class="glyphicon glyphicon-trash"></span>
+					</a>
                 </td>
+                }
                </tr>
             }
         
         </tbody>
     </table>
-
+    @if((user != null) && ("admin".equals(user.getRole()))){
     <p>
         <a href="@routes.HomeController.addEmployee()">
             <button class="btn btn-primary">Add an Employee</button>
         </a>
-</p>
+    </p>
+    }
 </div>
  }

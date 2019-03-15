@@ -1,8 +1,8 @@
-@(employeeForm: Form[models.Employee])
+@(employeeForm: Form[models.Employee], user: models.users.User)
 
 @import helper._
 
-@main("Add Employee"){
+@main("Add Employee", user){
     <p class="lead">Add a new employee</p>
 
     <!-- Use a views.html.helpers package method to create the form (instead of html)-->

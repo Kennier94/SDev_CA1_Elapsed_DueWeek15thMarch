@@ -18,6 +18,14 @@ create table employee (
   constraint pk_employee primary key (id)
 );
 
+create table user (
+  email                         varchar(255) not null,
+  role                          varchar(255),
+  name                          varchar(255),
+  password                      varchar(255),
+  constraint pk_user primary key (email)
+);
+
 alter table employee add constraint fk_employee_department_id foreign key (department_id) references department (id) on delete restrict on update restrict;
 create index ix_employee_department_id on employee (department_id);
 
@@ -30,4 +38,6 @@ drop index if exists ix_employee_department_id;
 drop table if exists department;
 
 drop table if exists employee;
+
+drop table if exists user;
 

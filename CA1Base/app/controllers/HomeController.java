@@ -13,6 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import models.*;
+import models.users.*;
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -41,22 +42,28 @@ public class HomeController extends Controller {
         }else {
             employeeList = Department.find.ref(cat).getEmployees();
         }
-        return ok(employeesOnRecord.render(employeeList, departmentList));
+        return ok(employeesOnRecord.render(employeeList, departmentList, User.getUserById(session().get("email"))));
 
      }
 
     public Result index() {
-        return ok(index.render());
+        return ok(index.render(User.getUserById(session().get("email"))));
     }
 
     public Result about() {
-        return ok(about.render());
+        return ok(about.render(User.getUserById(session().get("email"))));
     }
 
+    @Security.Authenticated(Secured.class)
+    @With(AuthAdmin.class)
+    @Transactional
     public Result addEmployee() {
         Form<Employee> employeeForm = formFactory.form(Employee.class);
-        return ok(addEmployee.render(employeeForm));
-}
+        return ok(addEmployee.render(employeeForm, User.getUserById(session().get("email"))));
+    }
+
+@Security.Authenticated(Secured.class)
+@Transactional
 public Result addEmployeeSubmit() {
     // We use the method bindFromRequest() to populate our Form<ItemOnSale> object with the
     // data that the user submitted. Thanks to Play Framework, we do not need to do the messy
@@ -68,7 +75,7 @@ public Result addEmployeeSubmit() {
         // Framework to send an error response to the user and display the additem page again. 
         // As we are passing in newItemForm, the form will be populated with the data that the 
         // user has already entered, saving them from having to enter it all over again.
-        return badRequest(addEmployee.render(newEmployeeForm));
+        return badRequest(addEmployee.render(newEmployeeForm, User.getUserById(session().get("email"))));
     } else {
         // If no errors are found in the form data, we extract the data from the form.
         // Form objects have handy utility methods, such as the get() method we are using 
@@ -95,6 +102,9 @@ public Result addEmployeeSubmit() {
     }
 }
 
+@Security.Authenticated(Secured.class)
+@With(AuthAdmin.class)
+@Transactional
 public Result deleteEmployee(Long id) {
 
     // The following line of code finds the item object by id, then calls the delete() method
@@ -107,7 +117,10 @@ public Result deleteEmployee(Long id) {
     return redirect(controllers.routes.HomeController.employeesOnRecord(0));
 }
 
-public Result updateEmployee(Long id) {
+    @Security.Authenticated(Secured.class)
+    @With(AuthAdmin.class)
+    @Transactional
+    public Result updateEmployee(Long id) {
     Employee i;
     Form<Employee> employeeForm;
 
@@ -117,12 +130,12 @@ public Result updateEmployee(Long id) {
 
         // Populate the form object with data from the item found in the database
         employeeForm = formFactory.form(Employee.class).fill(i);
-    } catch (Exception ex) {
-        return badRequest("error");
+        } catch (Exception ex) {
+            return badRequest("error");
     }
 
     // Display the "add item" page, to allow the user to update the item
-    return ok(addEmployee.render(employeeForm));
-}
+        return ok(addEmployee.render(employeeForm, User.getUserById(session().get("email"))));
+    }
 
 }
