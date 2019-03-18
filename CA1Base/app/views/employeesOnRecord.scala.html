@@ -1,6 +1,6 @@
 @(employees: List[models.Employee],departments: List[models.Department], user: models.users.User, env: play.api.Environment)
 @main("On Staff", user){
-    <h1>On Staff here</h1>
+    <h3>Employees</h3>
 
 
     @* Display successful new product message from flash, if it is set *@
@@ -14,7 +14,7 @@
 	        <div class="list-group">
                 <a href = "@routes.HomeController.employeesOnRecord(0)" class="list-group-item">All Departments</a>
 		        @for(c<-departments) {
-			        <a href = "@routes.HomeController.employeesOnRecord(c.getId())" class="list-group-employee catheight">@c.getName
+			        <a href = "@routes.HomeController.employeesOnRecord(c.getId())" class="list-group-item catheight">@c.getName
                         <span class="badge">@c.getEmployees.size</span> 
                     </a>
 			    }
@@ -22,7 +22,6 @@
     </div>
 
     <div class="col-sm-9">
-        <h4>Note that all products are second hand, unless otherwise stated.</h4>
         <table class="table table-bordered table-hover table-condensed">
             <thead>
         <!-- The header row-->
