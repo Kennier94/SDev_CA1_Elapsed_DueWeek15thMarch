@@ -23,6 +23,8 @@ public class Employee extends Model {
 
     @ManyToOne
     private Department department;
+    @ManyToOne
+    private Project project;
 
     // Default Constructor
     public Employee() {
@@ -34,7 +36,6 @@ public class Employee extends Model {
         this.name = name;
         this.age = age;
         this.yearsWorked = yearsWorked;
-        // this.startDate = startDate;
     }
 
     public static final Finder<Long, Employee> find = new Finder<>(Employee.class);
@@ -68,12 +69,7 @@ public static final List<Employee> findAll() {
     public void setYearsWorked(int yearsWorked) {
         this.yearsWorked= yearsWorked;
     }
-//     public Date getStartDate() {
-//         return startDate;
-//     }
-//     public void setStartDate(Date startDate) {
-//         this.startDate = startDate;
-// }
+
 
 public Department getDepartment() {
     return department;
@@ -81,4 +77,13 @@ public Department getDepartment() {
 public void setDepartment(Department department) {
     this.department = department;
 }
+
+public Project getProject() {
+    return project;
+}
+public void setProject(Project project) {
+    this.project = project;
+}
+
+
 }

@@ -6,7 +6,7 @@
 GET     /                           controllers.HomeController.index
 
 GET     /employeesOnRecord                     controllers.HomeController.employeesOnRecord(cat:Long?=0L)
-GET     /about                      controllers.HomeController.about
+GET     /projectsAndEmployees                  controllers.HomeController.projectsAndEmployees(cat:Long?=0L)
 
 
 GET     /addEmployee                    controllers.HomeController.addEmployee

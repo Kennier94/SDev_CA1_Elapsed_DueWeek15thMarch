@@ -45,6 +45,22 @@ public class HomeController extends Controller {
      * this method will be called when the application receives a
      * <code>GET</code> request with a path of <code>/</code>.
      */
+
+    public Result projectsAndEmployees(Long cat) {
+        List<Employee> employeeList = null;
+        List<Project> projectList = Project.findAll();
+
+        if(cat ==0){
+            employeeList = Employee.findAll();
+        }else {
+            employeeList = Project.find.ref(cat).getEmployees();
+        }
+        return ok(projectsAndEmployees.render(employeeList, projectList, 
+            User.getUserById(session().get("email")),e));
+
+     }
+       
+
     public Result employeesOnRecord(Long cat) {
         List<Employee> employeeList = null;
         List<Department> departmentList = Department.findAll();
@@ -61,10 +77,6 @@ public class HomeController extends Controller {
 
     public Result index() {
         return ok(index.render(User.getUserById(session().get("email"))));
-    }
-
-    public Result about() {
-        return ok(about.render(User.getUserById(session().get("email"))));
     }
 
     @Security.Authenticated(Secured.class)

@@ -24,7 +24,7 @@
 		<ul class="nav navbar-nav">
             <li @if(pagename == "Home") {class="active"}><a href="@routes.HomeController.index()">Home</a></li>
 		    <li @if(pagename == "EmployeesOnRecord") {class="active"}><a href="@routes.HomeController.employeesOnRecord()">Employees On Record</a></li>
-		    <li @if(pagename == "About") {class="active"}><a href="@routes.HomeController.about()">About us</a></li>
+		    <li @if(pagename == "Project") {class="active"}><a href="@routes.HomeController.projectsAndEmployees()">Projects</a></li>
 			<li @if(pagename == "Log In"){class="active"}>
 				@if(user != null){
 					<a href="@routes.LoginController.logout()">Log Out</a>
